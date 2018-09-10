@@ -1913,6 +1913,8 @@ class YAS3FS(LoggingMixIn, Operations):
     def check_data(self, path):
         logger.debug("check_data '%s'" % (path))
         with self.cache.get_lock(path):
+            if not os.path.exists(path):
+                self.cache.delete(path, 'data')
             data = self.cache.get(path, 'data')
             if not data or data.has('new'):
                 k = self.get_key(path)
